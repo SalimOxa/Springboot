@@ -10,6 +10,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +27,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bezkoder.springjwt.models.ERole;
 import com.bezkoder.springjwt.models.Role;
@@ -34,6 +39,7 @@ import com.bezkoder.springjwt.payload.request.LoginRequest;
 import com.bezkoder.springjwt.payload.request.SignupRequest;
 import com.bezkoder.springjwt.payload.response.JwtResponse;
 import com.bezkoder.springjwt.payload.response.MessageResponse;
+import com.bezkoder.springjwt.repository.FilesStorageService;
 import com.bezkoder.springjwt.repository.RoleRepository;
 import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.security.jwt.JwtUtils;
@@ -55,6 +61,9 @@ public class AuthController {
 
 	@Autowired
 	PasswordEncoder encoder;
+	
+	@Autowired
+	FilesStorageService storageService;
 
 	@Autowired
 	JwtUtils jwtUtils;
@@ -78,6 +87,7 @@ public class AuthController {
 												 userDetails.getUsername(),
 												 userDetails.getTel(),
 												 userDetails.getEmail(), 
+												 userDetails.getPhoto(),
 												 roles));
 	}
 
@@ -99,6 +109,7 @@ public class AuthController {
 		User user = new User(signUpRequest.getUsername(), 
 			               	 signUpRequest.getTel(),
 							 signUpRequest.getEmail(),
+							 signUpRequest.getPhoto(),
 							 encoder.encode(signUpRequest.getPassword()));
 
 		Set<String> strRoles = signUpRequest.getRole();
@@ -179,4 +190,42 @@ public class AuthController {
 	  public List<Role> getAllRole() {
 	      return roleRepository.findAll();
 	  }
+	/*	@PostMapping("/upload1")
+		public String uploadFile(@RequestParam("file") MultipartFile file) {
+			String message = "";
+			try {
+				storageService.save(file);
+				return file.getOriginalFilename();
+
+			} catch (Exception e) {
+				message = "Could not upload the file";
+				return message;
+			}
+		}
+		@GetMapping("/files1/{filename:.+}")
+		@ResponseBody
+		public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+			Resource file = storageService.load(filename);
+			return ResponseEntity.ok()
+			        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+		}*/
+	  @PostMapping("/upload1")
+		public String uploadFile(@RequestParam("file") MultipartFile file) {
+			String message = "";
+			try {
+				storageService.save(file);
+				return file.getOriginalFilename();
+
+			} catch (Exception e) {
+				message = "Could not upload the file";
+				return message;
+			}
+		}
+		@GetMapping("/files1/{filename:.+}")
+		@ResponseBody
+		public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+			Resource file = storageService.load(filename);
+			return ResponseEntity.ok()
+			        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+		}
 }

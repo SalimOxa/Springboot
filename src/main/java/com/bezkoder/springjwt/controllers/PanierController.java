@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -121,8 +122,11 @@ public class PanierController {
 				 
 		return ResponseEntity.ok(new MessageResponse("panier registered successfully!"));
 		}
-	 @GetMapping("/panier/totalPrix")
-		public Long getTotalPrix() {
-		    return panierRepository.getPrixTotal() + panierRepository.getPrixTotal1();
+	
+
+	 @GetMapping("/panier/totalPrix/{userId}")
+		public Long getTotalPrix(@PathVariable(value = "userId") Long userId) {
+	 	 return panierRepository.getPrixTotalTraining(userId);
+		    /*return panierRepository.getPrixTotal() + panierRepository.getPrixTotal1();*/
 		}
 }

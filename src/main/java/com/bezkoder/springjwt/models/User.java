@@ -25,20 +25,23 @@ public class User {
 	private Long id;
 
 	@NotBlank
-	@Size(max = 20)
+	 @Size(min = 3, max = 120)
 	private String username;
 	
+    @Size(max = 120)
+	private String photo;
+    
 	@NotBlank
 	@Size(min = 8, max = 20)
 	private String tel;
 
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 120)
 	@Email
 	private String email;
 
 	@NotBlank
-	@Size(max = 120)
+	 @Size(min = 6, max = 120)
 	private String password;
 
 	 @Nullable
@@ -62,6 +65,45 @@ public class User {
 		this.tel = tel;
 		this.email = email;
 		this.password = password;
+	}
+
+	public User(Long id, @NotBlank @Size(min = 3, max = 120) String username, @Size(max = 5000) String photo,
+			@NotBlank @Size(min = 8, max = 20) String tel, @NotBlank @Size(max = 50) @Email String email,
+			@NotBlank @Size(min = 6, max = 120) String password, List<Panier> paniers, Set<Role> roles) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.photo = photo;
+		this.tel = tel;
+		this.email = email;
+		this.password = password;
+		this.paniers = paniers;
+		this.roles = roles;
+	}
+
+	public User(@NotBlank @Size(min = 3, max = 120) String username, @NotBlank @Size(min = 8, max = 20) String tel, @NotBlank @Size(max = 50) @Email String email,
+			@NotBlank @Size(max = 50) String photo, @NotBlank @Size(min = 6, max = 120) String password) {
+		this.username = username;
+		this.tel = tel;
+		this.email = email;
+		this.photo = photo;
+		this.password = password;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public List<Panier> getPaniers() {
+		return paniers;
+	}
+
+	public void setPaniers(List<Panier> paniers) {
+		this.paniers = paniers;
 	}
 
 	public Long getId() {

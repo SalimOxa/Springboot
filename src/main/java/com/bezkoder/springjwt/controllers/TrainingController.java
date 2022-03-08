@@ -188,7 +188,7 @@ public class TrainingController {
 	  public List<Domain> getAllDomain() {
 	      return domainRepository.findAll();
 	  }
-	  @RequestMapping(value ="/chercherFormationAssurance", method = RequestMethod.GET)
+	/*  @RequestMapping(value ="/chercherFormationAssurance", method = RequestMethod.GET)
 		public Page<Training>chercherTrainingAssurance(
 				@RequestParam(name="mc",defaultValue ="" )String mc,
 				@RequestParam(name="page",defaultValue ="" )String  page,
@@ -207,7 +207,7 @@ public class TrainingController {
 			}
 			Page<Training> trainingpegable=new PageImpl<>(trainings);
 		return trainingpegable;
-		}
+		}*/
 		
 		@RequestMapping(value ="/chercherFormationbanque", method = RequestMethod.GET)
 		public Page<Training>chercherTrainingbanque(
@@ -220,8 +220,28 @@ public class TrainingController {
 			for(Training training:trainingRepository.chercherList("%"+mc+"%")) {
 				for (Domain domain:training.getDomains()) {
 					
-					String banque = "banque";
+					String banque = "Banque";
 					if(domain.getName().equals(banque)) {
+						
+						trainings.add(training);				}
+				}
+			}
+			Page<Training> trainingpegable=new PageImpl<>(trainings);
+		return trainingpegable;
+		}
+	  @RequestMapping(value ="/chercherFormationAssurance", method = RequestMethod.GET)
+		public Page<Training>chercherTrainingAssurance(
+				@RequestParam(name="mc",defaultValue ="" )String mc,
+				@RequestParam(name="page",defaultValue ="" )String  page,
+				@RequestParam(name="size",defaultValue ="" )String  size){
+			
+			List<Training> trainings=new ArrayList<Training>();
+			
+			for(Training training:trainingRepository.chercherList("%"+mc+"%")) {
+				for (Domain domain:training.getDomains()) {
+					
+					String assurance = "Assurance";
+					if(domain.getName().equals(assurance)) {
 						
 						trainings.add(training);				}
 				}
@@ -241,7 +261,7 @@ public class TrainingController {
 			for(Training training:trainingRepository.chercherList("%"+mc+"%")) {
 				for (Domain domain:training.getDomains()) {
 					
-					String immobilier = "immobilier";
+					String immobilier = "Immobilier";
 					if(domain.getName().equals(immobilier)) {
 						
 						trainings.add(training);				}
@@ -282,5 +302,79 @@ public class TrainingController {
 			training.setModalitys(listOfModalitys);
 			System.out.println(training);
 			return trainingRepository.save(training);
+		}
+		
+		@RequestMapping(value ="/chercherFormationenligne", method = RequestMethod.GET)
+		public Page<Training>chercherTrainingEnligne(
+				@RequestParam(name="mc",defaultValue ="" )String mc,
+				@RequestParam(name="page",defaultValue ="" )String  page,
+				@RequestParam(name="size",defaultValue ="" )String  size){
+			
+			List<Training> trainings=new ArrayList<Training>();
+			
+			for(Training training:trainingRepository.chercherList("%"+mc+"%")) {
+				for (Modality modality:training.getModalitys()) {
+					
+					String enligne = "En ligne";
+					if(modality.getName().equals(enligne)) {
+						
+						trainings.add(training);				}
+				}
+			}
+			Page<Training> trainingpegable=new PageImpl<>(trainings);
+		return trainingpegable;
+		}
+		@RequestMapping(value ="/chercherFormationpresentiel", method = RequestMethod.GET)
+		public Page<Training>chercherTrainingPresentiel(
+				@RequestParam(name="mc",defaultValue ="" )String mc,
+				@RequestParam(name="page",defaultValue ="" )String  page,
+				@RequestParam(name="size",defaultValue ="" )String  size){
+			
+			List<Training> trainings=new ArrayList<Training>();
+			
+			for(Training training:trainingRepository.chercherList("%"+mc+"%")) {
+				for (Modality modality:training.getModalitys()) {
+					
+					String presentiel = "En présentiel";
+					if(modality.getName().equals(presentiel)) {
+						
+						trainings.add(training);				}
+				}
+			}
+			Page<Training> trainingpegable=new PageImpl<>(trainings);
+		return trainingpegable;
+		}
+		
+		@RequestMapping(value="/training/count", method = RequestMethod.GET)
+		public long countTraining () {
+			long count = trainingRepository.getCountOfTraining();
+			return count;
+		}
+		
+		@RequestMapping(value="/training/countAssurance", method = RequestMethod.GET)
+		public long countTrainingAssurance () {
+			long count = trainingRepository.getCountOfTrainingAssurance();
+			return count;
+		}
+		@RequestMapping(value="/training/countBanque", method = RequestMethod.GET)
+		public long countTrainingBanque () {
+			long count = trainingRepository.getCountOfTrainingBanque();
+			return count;
+		}
+		
+		@RequestMapping(value="/training/countImmobilier", method = RequestMethod.GET)
+		public long countTrainingImmobilier () {
+			long count = trainingRepository.getCountOfTrainingImmobilier();
+			return count;
+		}
+		@RequestMapping(value="/training/countEnligne", method = RequestMethod.GET)
+		public long countTrainingEnligne () {
+			long count = trainingRepository.getCountOfTrainingEnligne();
+			return count;
+		}
+		@RequestMapping(value="/training/countPresentiel", method = RequestMethod.GET)
+		public long countTrainingPresentiel () {
+			long count = trainingRepository.getCountOfTrainingPresentiel();
+			return count;
 		}
 }
